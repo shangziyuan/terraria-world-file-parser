@@ -12,5 +12,8 @@ cd Library/Application\ Support/Terraria
 cd Worlds
 ```
 
-Get the relevant `.wld` file.
+Get the relevant `.wld` file
+
+We know that the file is a binary file, because `file -b --mime Fleek_Canyon_of_Mercy.wld` returns `application/octet-stream; charset=binary` 
+.
 ## Parsing the file
