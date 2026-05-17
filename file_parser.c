@@ -8,10 +8,10 @@ int main(void)
     getcwd(cwd, sizeof(cwd));
     printf("CWD: %s\n", cwd);
 
-    unsigned char buffer[20];
+    unsigned char buffer[256];
     FILE *ptr;
 
-    ptr = fopen("Fleek_Canyon_of_Mercy.wld", "rb");
+    ptr = fopen("Fleek_Canyon_of_Mercy.wld 2", "rb");
     if (!ptr) {
         perror("fopen");
         return 1;
@@ -38,6 +38,20 @@ int main(void)
         printf("This is a world file\n");
     } else {
         printf("This is not a world file\n");
+    }
+
+    // check revision number
+    uint32_t revision;
+    memcpy(&revision, &buffer[0x0C], 4);
+    printf("Revision: %u\n", revision);
+
+    // check isFavorite
+    uint64_t isFavorite;
+    memcpy(&isFavorite, &buffer[0x10], 8);
+    if (isFavorite) {
+        printf("This world is set as favourite\n");
+    } else {
+        printf("This world is not set as favorite\n");
     }
 
     for(int i = 0; i<20; i++)
