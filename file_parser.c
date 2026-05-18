@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdlib.h>
 
 int main(void)
 {
@@ -53,6 +54,24 @@ int main(void)
     } else {
         printf("This world is not set as favorite\n");
     }
+
+    // check number of pointers
+    short numPointers;
+    memcpy(&numPointers, &buffer[0x18], 2);
+    printf("Number of pointers: %u\n", numPointers);
+
+    int offset = 0x18 + 2;
+    int32_t *positions = malloc(numPointers * sizeof(int32_t));
+    for (int i=0; i < numPointers; i++) {
+        memcpy(&positions[i], &buffer[offset], 4);
+        offset += 4;
+    }
+
+    for (int i = 0; i < numPointers; i++) {
+        printf("Section %d starts at byte: %d\n", i, positions[i]);
+    }
+
+    free(positions);
 
     for(int i = 0; i<20; i++)
         if (buffer[i] >= 32 && buffer[i] <= 126)  // within ASCII range
