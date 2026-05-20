@@ -19,48 +19,54 @@ int main(void)
     }
 
     fread(buffer, sizeof(buffer), 1, ptr);
+    int offset = 0x0;
 
     // check version
     uint32_t version;
-    memcpy(&version, &buffer[0], 4);
+    memcpy(&version, &buffer[offset], 4);
     printf("Version: %u\n", version);  // little-endian 32-bit integer
+    offset += 4;
 
     // check magic number
-    if (memcmp(&buffer[0x04], "relogic", 7) != 0) {
+    if (memcmp(&buffer[offset], "relogic", 7) != 0) {
         fprintf(stderr, "invalid file format\n");
         fclose(ptr);
         return 1;
     }
+    offset += 7;
 
     // check file type
     unsigned char wldFile = 2;
     
-    if (memcmp(&buffer[0x0B], &wldFile, 1) == 0) {
+    if (memcmp(&buffer[offset], &wldFile, 1) == 0) {
         printf("This is a world file\n");
     } else {
         printf("This is not a world file\n");
     }
+    offset += 1;
 
     // check revision number
     uint32_t revision;
-    memcpy(&revision, &buffer[0x0C], 4);
+    memcpy(&revision, &buffer[offset], 4);
     printf("Revision: %u\n", revision);
+    offset += 4;
 
     // check isFavorite
     uint64_t isFavorite;
-    memcpy(&isFavorite, &buffer[0x10], 8);
+    memcpy(&isFavorite, &buffer[offset], 8);
     if (isFavorite) {
         printf("This world is set as favourite\n");
     } else {
         printf("This world is not set as favorite\n");
     }
+    offset += 8;
 
     // check number of pointers
     short numPointers;
-    memcpy(&numPointers, &buffer[0x18], 2);
+    memcpy(&numPointers, &buffer[offset], 2);
     printf("Number of pointers: %u\n", numPointers);
+    offset += 2;
 
-    int offset = 0x18 + 2;
     int32_t *positions = malloc(numPointers * sizeof(int32_t));
     for (int i=0; i < numPointers; i++) {
         memcpy(&positions[i], &buffer[offset], 4);
