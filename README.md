@@ -30,13 +30,14 @@ We know that the file is a binary file, because `file -b --mime Fleek_Canyon_of_
 | 0x18   | 2    | short     | Number of pointers               | N              |
 | 0x1A   | 4×N  | int32_t[] | Section offset table (N entries) |                |
 
-
 The first 4 bytes (`int`) is allocated to the file version.  
 The next 7 bytes are the magic number. It's equivalent ASCII value should be equal to "relogic", Terraria's developer.  
 The next byte (`0x0B`) indicates the file type. A value of 2 confirms that we are dealing with a World file.  
 
 ### Running C
+
+Supply the file name as the argument:
 ```
 clang file_parser.c -o file_parser -Wall
-./file_parser
+./file_parser "Fleek_Canyon_of_Mercy.wld 2"
 ```

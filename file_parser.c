@@ -3,16 +3,21 @@
 #include <string.h>
 #include <stdlib.h>
 
-int main(void)
+int main(int argc, char *argv[])
 {
     char cwd[4096];
     getcwd(cwd, sizeof(cwd));
     printf("CWD: %s\n", cwd);
 
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s <file.wld>\n", argv[0]);
+        return 1;
+    }
+
     unsigned char buffer[256];
     FILE *ptr;
 
-    ptr = fopen("Fleek_Canyon_of_Mercy.wld 2", "rb");
+    ptr = fopen(argv[1], "rb");
     if (!ptr) {
         perror("fopen");
         return 1;
