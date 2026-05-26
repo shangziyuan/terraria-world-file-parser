@@ -82,6 +82,27 @@ int main(int argc, char *argv[])
         printf("Section %d starts at byte: %d\n", i, positions[i]);
     }
 
+    // go to worldHeader
+    printf("World header is located at byte %d\n", positions[0]);
+    fseek(ptr, positions[0], SEEK_SET);
+    unsigned char worldNameLength;
+    fread(&worldNameLength, 1, 1, ptr);
+    printf("World name length: %u\n", worldNameLength);
+
+    char worldName[worldNameLength];
+    fread(worldName, 1, worldNameLength, ptr);
+    printf("World name: %s\n", worldName);
+
+    unsigned char worldIdLength;
+    fread(&worldIdLength, 1, 1, ptr);
+    printf("World id length: %u\n", worldIdLength);
+
+    char worldId[worldIdLength];
+    fread(worldId, 1, worldIdLength, ptr);
+    printf("World id: %s\n", worldId);  // 2.1.2.0.304257113
+
+
+
     free(positions);
 
     for(int i = 0; i<20; i++)

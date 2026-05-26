@@ -41,3 +41,23 @@ Supply the file name as the argument:
 clang file_parser.c -o file_parser -Wall
 ./file_parser "Fleek_Canyon_of_Mercy.wld 2"
 ```
+
+## Learnings
+
+**Variable-length array (VLA)**  
+The array size is determined at runtime instead of compile time
+
+No VLA:
+```c
+char worldName[256];
+fread(worldName, 1, worldNameLength, ptr);
+worldName[worldNameLength] = '\0';
+printf("World name: %s\n", worldName);
+```
+
+With VLA:
+```c
+char worldName[worldNameLength];
+fread(worldName, 1, worldNameLength, ptr);
+printf("World name: %.*s\n", worldNameLength, worldName);
+```
