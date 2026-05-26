@@ -61,3 +61,10 @@ char worldName[worldNameLength];
 fread(worldName, 1, worldNameLength, ptr);
 printf("World name: %.*s\n", worldNameLength, worldName);
 ```
+
+## Resources
+> Standing on the shoulders of giants
+
+- https://seancode.com/terrafirma/world.html
+- https://iamkate.com/code/binary-file-viewer/
+- http://ludwig.schafer.free.fr
