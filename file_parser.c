@@ -101,7 +101,17 @@ int main(int argc, char *argv[])
     fread(worldId, 1, worldIdLength, ptr);
     printf("World id: %s\n", worldId);  // 2.1.2.0.304257113
 
-
+    // go to NPCs section
+    printf("NPCs section is located at byte %d\n", positions[4]);
+    fseek(ptr, positions[4], SEEK_SET);
+    unsigned char npcBuffer[256];
+    fread(npcBuffer, 1, 256, ptr);
+    for (int i = 0; i < 256; i++)
+        if (npcBuffer[i] >= 32 && npcBuffer[i] <= 126)
+            printf("%c", npcBuffer[i]);
+        else
+            printf(".");
+    printf("\n");
 
     free(positions);
 

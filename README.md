@@ -68,3 +68,4 @@ printf("World name: %.*s\n", worldNameLength, worldName);
 - https://seancode.com/terrafirma/world.html
 - https://iamkate.com/code/binary-file-viewer/
 - http://ludwig.schafer.free.fr
+- https://angelolloti.com/blog/trust-3/
