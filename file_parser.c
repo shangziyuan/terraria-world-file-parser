@@ -113,6 +113,18 @@ int main(int argc, char *argv[])
             printf(".");
     printf("\n");
 
+    // go to Bestiary
+    printf("Bestiary is located at byte %d\n", positions[8]);
+    fseek(ptr, positions[8], SEEK_SET);
+    unsigned char bestiaryBuffer[256];
+    fread(bestiaryBuffer, 1, 256, ptr);
+    for (int i = 0; i < 256; i++)
+        if (bestiaryBuffer[i] >= 32 && bestiaryBuffer[i] <= 126)
+            printf("%c", bestiaryBuffer[i]);
+        else
+            printf(".");
+    printf("\n");
+
     free(positions);
 
     for(int i = 0; i<20; i++)
