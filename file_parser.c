@@ -115,15 +115,46 @@ int main(int argc, char *argv[])
 
     // go to Bestiary
     printf("Bestiary is located at byte %d\n", positions[8]);
+    printf("Next section is located at byte %d\n", positions[9]);
     fseek(ptr, positions[8], SEEK_SET);
-    unsigned char bestiaryBuffer[256];
-    fread(bestiaryBuffer, 1, 256, ptr);
-    for (int i = 0; i < 256; i++)
-        if (bestiaryBuffer[i] >= 32 && bestiaryBuffer[i] <= 126)
-            printf("%c", bestiaryBuffer[i]);
-        else
-            printf(".");
-    printf("\n");
+
+    int32_t numKillEntries;
+    fread(&numKillEntries, 4, 1, ptr);
+    printf("Number of kill entries: %u\n", numKillEntries);
+    for (int i=0; i<numKillEntries; i++) {
+        unsigned char len;
+        fread(&len, 1, 1, ptr);
+        char name[len + 1];
+        fread(name, 1, len, ptr);
+        name[len] = '\0';
+        int32_t kills;
+        fread(&kills, 4, 1, ptr);
+        printf("  %s: %d kills\n", name, kills);
+    }
+
+    int32_t numSeenEntries;
+    fread(&numSeenEntries, 4, 1, ptr);
+    printf("Number of seen entries: %u\n", numSeenEntries);
+    for (int i=0; i<numSeenEntries; i++) {
+        unsigned char len;
+        fread(&len, 1, 1, ptr);
+        char name[len + 1];
+        fread(name, 1, len, ptr);
+        name[len] = '\0';
+        printf("  %s seen\n", name);
+    }
+
+    int32_t numChattedEntries;
+    fread(&numChattedEntries, 4, 1, ptr);
+    printf("Number of chatted NPCs entries: %u\n", numChattedEntries);
+    for (int i=0; i<numChattedEntries; i++) {
+        unsigned char len;
+        fread(&len, 1, 1, ptr);
+        char name[len + 1];
+        fread(name, 1, len, ptr);
+        name[len] = '\0';
+        printf("  Chatted with: %s\n", name);
+    }
 
     free(positions);
 
