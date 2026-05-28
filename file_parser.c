@@ -113,6 +113,13 @@ int main(int argc, char *argv[])
             printf(".");
     printf("\n");
 
+    // go to Town Manager
+    printf("Town Manager is located at byte %d\n", positions[7]);
+    fseek(ptr, positions[7], SEEK_SET);
+    int32_t numberRooms;
+    fread(&numberRooms, 4, 1, ptr);
+    printf("Number of rooms: %d\n", numberRooms);
+
     // go to Bestiary
     printf("Bestiary is located at byte %d\n", positions[8]);
     printf("Next section is located at byte %d\n", positions[9]);

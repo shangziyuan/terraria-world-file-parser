@@ -62,6 +62,24 @@ fread(worldName, 1, worldNameLength, ptr);
 printf("World name: %.*s\n", worldNameLength, worldName);
 ```
 
+**Null-terminated strings vs length-prefixed strings**  
+C strings need a `\0` byte to know where they end. Binary files like `.wld` don't store `\0` — they store a length byte followed by the raw characters. When reading these into C, you either:
+
+1. Allocate `len + 1`, read `len` bytes, then manually add `\0`:
+```c
+char name[len + 1];
+fread(name, 1, len, ptr);
+name[len] = '\0';
+printf("%s\n", name);
+```
+
+2. Skip the `\0` and tell `printf` the length explicitly:
+```c
+char name[len];
+fread(name, 1, len, ptr);
+printf("%.*s\n", len, name);
+```
+
 ## Resources
 > Standing on the shoulders of giants
 
