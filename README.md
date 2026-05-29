@@ -87,3 +87,4 @@ printf("%.*s\n", len, name);
 - https://iamkate.com/code/binary-file-viewer/
 - http://ludwig.schafer.free.fr
 - https://angelolloti.com/blog/trust-3/
+- https://terraria.wiki.gg/wiki/NPC_IDs
