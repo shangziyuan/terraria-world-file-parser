@@ -104,6 +104,52 @@ int main(int argc, char *argv[])
     // go to NPCs section
     printf("NPCs section is located at byte %d\n", positions[4]);
     fseek(ptr, positions[4], SEEK_SET);
+
+    int32_t shimmerCount;
+    fread(&shimmerCount, 4, 1, ptr);
+    printf("Shimmer count: %u\n", shimmerCount);
+
+    unsigned char hasNpc;
+    fread(&hasNpc, 1, 1, ptr);
+    while (hasNpc) {
+        int32_t type;
+        fread(&type, 4, 1, ptr);
+        printf("Type: %u\n", type);
+        unsigned char nameLength;
+        fread(&nameLength, 1, 1, ptr);
+        printf("NameLength: %u\n", nameLength);
+        char name[nameLength + 1];
+        fread(name, 1, nameLength, ptr);
+        name[nameLength] = '\0';
+        printf("Name: %s\n", name);
+
+        float posX, posY;
+        fread(&posX, 4, 1, ptr);
+        fread(&posY, 4, 1, ptr);
+        printf("PosX: %f\n", posX);
+        printf("PosY: %f\n", posY);
+
+        unsigned char isHomeless;
+        fread(&isHomeless, 1, 1, ptr);
+        printf("isHomeless: %u\n", isHomeless);
+
+        int32_t homeX, homeY, variation;
+        fread(&homeX, 4, 1, ptr);
+        fread(&homeY, 4, 1, ptr);
+        fread(&variation, 4, 1, ptr);
+        printf("homeX: %d\n", homeX);
+        printf("homeY: %d\n", homeY);
+        printf("variation: %d\n", variation);
+
+        unsigned char isShimmered;
+        fread(&isShimmered, 1, 1, ptr);
+        printf("isShimmered: %u\n", isShimmered);
+
+        fread(&hasNpc, 1, 1, ptr);
+        // hasNpc = 0;  // loop once first as test
+    }
+
+    // TODO change
     unsigned char npcBuffer[256];
     fread(npcBuffer, 1, 256, ptr);
     for (int i = 0; i < 256; i++)
