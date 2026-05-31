@@ -34,6 +34,10 @@ The first 4 bytes (`int`) is allocated to the file version.
 The next 7 bytes are the magic number. It's equivalent ASCII value should be equal to "relogic", Terraria's developer.  
 The next byte (`0x0B`) indicates the file type. A value of 2 confirms that we are dealing with a World file.  
 
+### Terraria Need-to-knows
+- In Terraria, each tile is 16×16 pixels.
+- 
+
 ### Running C
 
 Supply the file name as the argument:
