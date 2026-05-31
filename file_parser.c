@@ -3,8 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     char cwd[4096];
     getcwd(cwd, sizeof(cwd));
     printf("CWD: %s\n", cwd);
@@ -29,7 +28,7 @@ int main(int argc, char *argv[])
     // check version
     uint32_t version;
     memcpy(&version, &buffer[offset], 4);
-    printf("Version: %u\n", version);  // little-endian 32-bit integer
+    printf("Version: %u\n", version); // little-endian 32-bit integer
     offset += 4;
 
     // check magic number
@@ -42,7 +41,7 @@ int main(int argc, char *argv[])
 
     // check file type
     unsigned char wldFile = 2;
-    
+
     if (memcmp(&buffer[offset], &wldFile, 1) == 0) {
         printf("This is a world file\n");
     } else {
@@ -73,7 +72,7 @@ int main(int argc, char *argv[])
     offset += 2;
 
     int32_t *positions = malloc(numPointers * sizeof(int32_t));
-    for (int i=0; i < numPointers; i++) {
+    for (int i = 0; i < numPointers; i++) {
         memcpy(&positions[i], &buffer[offset], 4);
         offset += 4;
     }
@@ -99,7 +98,43 @@ int main(int argc, char *argv[])
 
     char worldId[worldIdLength];
     fread(worldId, 1, worldIdLength, ptr);
-    printf("World id: %s\n", worldId);  // 2.1.2.0.304257113
+    printf("World id: %s\n", worldId); // 2.1.2.0.304257113
+
+    // something probably wrong here
+    int64_t generatorVersion;
+    fread(&generatorVersion, 8, 1, ptr);
+    printf("Generator version: %lld\n", generatorVersion);
+
+    unsigned char guid[16];
+    fread(guid, 1, 16, ptr);
+    for (int i = 0; i < 16; i++) {
+        printf("guid[%d]: %u\n", i, guid[i]);
+    }
+
+    int32_t left;
+    fread(&left, 4, 1, ptr);
+    printf("Left world bound: %d\n", left);
+
+    int32_t right;
+    fread(&right, 4, 1, ptr);
+    printf("Right world bound: %d\n", right);
+
+    int32_t top;
+    fread(&top, 4, 1, ptr);
+    printf("Top world bound: %d\n", top);
+
+    int32_t bottom;
+    fread(&bottom, 4, 1, ptr);
+    printf("Bottom world bound: %d\n", bottom);
+
+    int32_t worldHeightInTiles;
+    fread(&worldHeightInTiles, 4, 1, ptr);
+    printf("World height in tiles: %d\n", worldHeightInTiles);
+
+    int32_t worldWidthInTiles;
+    fread(&worldWidthInTiles, 4, 1, ptr);
+    printf("World width in tiles: %d\n", worldWidthInTiles);
+
 
     // go to NPCs section
     printf("NPCs section is located at byte %d\n", positions[4]);
@@ -146,18 +181,21 @@ int main(int argc, char *argv[])
         printf("isShimmered: %u\n", isShimmered);
 
         fread(&hasNpc, 1, 1, ptr);
-        // hasNpc = 0;  // loop once first as test
     }
 
-    // TODO change
-    unsigned char npcBuffer[256];
-    fread(npcBuffer, 1, 256, ptr);
-    for (int i = 0; i < 256; i++)
-        if (npcBuffer[i] >= 32 && npcBuffer[i] <= 126)
-            printf("%c", npcBuffer[i]);
-        else
-            printf(".");
-    printf("\n");
+    // second loop (special NPCs with position only, usually empty)
+    fread(&hasNpc, 1, 1, ptr);
+    while (hasNpc) {
+        int32_t type;
+        float posX, posY;
+        fread(&type, 4, 1, ptr);
+        fread(&posX, 4, 1, ptr);
+        fread(&posY, 4, 1, ptr);
+        printf("Special NPC type %d at (%.0f, %.0f)\n", type, posX, posY);
+        fread(&hasNpc, 1, 1, ptr);
+    }
+
+    printf("Current position: %ld\n", ftell(ptr));
 
     // go to Town Manager
     printf("Town Manager is located at byte %d\n", positions[7]);
@@ -174,7 +212,7 @@ int main(int argc, char *argv[])
     int32_t numKillEntries;
     fread(&numKillEntries, 4, 1, ptr);
     printf("Number of kill entries: %u\n", numKillEntries);
-    for (int i=0; i<numKillEntries; i++) {
+    for (int i = 0; i < numKillEntries; i++) {
         unsigned char len;
         fread(&len, 1, 1, ptr);
         char name[len + 1];
@@ -188,7 +226,7 @@ int main(int argc, char *argv[])
     int32_t numSeenEntries;
     fread(&numSeenEntries, 4, 1, ptr);
     printf("Number of seen entries: %u\n", numSeenEntries);
-    for (int i=0; i<numSeenEntries; i++) {
+    for (int i = 0; i < numSeenEntries; i++) {
         unsigned char len;
         fread(&len, 1, 1, ptr);
         char name[len + 1];
@@ -200,7 +238,7 @@ int main(int argc, char *argv[])
     int32_t numChattedEntries;
     fread(&numChattedEntries, 4, 1, ptr);
     printf("Number of chatted NPCs entries: %u\n", numChattedEntries);
-    for (int i=0; i<numChattedEntries; i++) {
+    for (int i = 0; i < numChattedEntries; i++) {
         unsigned char len;
         fread(&len, 1, 1, ptr);
         char name[len + 1];
@@ -211,9 +249,9 @@ int main(int argc, char *argv[])
 
     free(positions);
 
-    for(int i = 0; i<20; i++)
-        if (buffer[i] >= 32 && buffer[i] <= 126)  // within ASCII range
-            printf("%c", buffer[i]);  // prints as ASCII
+    for (int i = 0; i < 20; i++)
+        if (buffer[i] >= 32 && buffer[i] <= 126) // within ASCII range
+            printf("%c", buffer[i]); // prints as ASCII
         else
             printf(".");
 
