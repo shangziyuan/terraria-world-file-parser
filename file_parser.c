@@ -92,24 +92,29 @@ int main(int argc, char *argv[]) {
     fread(worldName, 1, worldNameLength, ptr);
     printf("World name: %s\n", worldName);
 
-    unsigned char worldIdLength;
-    fread(&worldIdLength, 1, 1, ptr);
-    printf("World id length: %u\n", worldIdLength);
+    unsigned char worldSeedLength;
+    fread(&worldSeedLength, 1, 1, ptr);
+    printf("World seed length: %u\n", worldSeedLength);
 
-    char worldId[worldIdLength];
-    fread(worldId, 1, worldIdLength, ptr);
-    printf("World id: %s\n", worldId); // 2.1.2.0.304257113
+    char worldSeed[worldSeedLength];
+    fread(worldSeed, 1, worldSeedLength, ptr);
+    printf("World seed: %s\n", worldSeed); // 2.1.2.0.304257113
 
-    // something probably wrong here
     int64_t generatorVersion;
     fread(&generatorVersion, 8, 1, ptr);
     printf("Generator version: %lld\n", generatorVersion);
 
     unsigned char guid[16];
     fread(guid, 1, 16, ptr);
-    for (int i = 0; i < 16; i++) {
-        printf("guid[%d]: %u\n", i, guid[i]);
-    }
+    printf("GUID: %02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x\n",
+         guid[0], guid[1], guid[2], guid[3],
+         guid[4], guid[5], guid[6], guid[7],
+         guid[8], guid[9], guid[10], guid[11],
+         guid[12], guid[13], guid[14], guid[15]);
+
+    int32_t worldID;
+    fread(&worldID, 4, 1, ptr);
+    printf("World ID: %u\n", worldID);
 
     int32_t left;
     fread(&left, 4, 1, ptr);
