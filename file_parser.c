@@ -140,6 +140,40 @@ int main(int argc, char *argv[]) {
     fread(&worldWidthInTiles, 4, 1, ptr);
     printf("World width in tiles: %d\n", worldWidthInTiles);
 
+    int32_t gameMode;
+    fread(&gameMode, 4, 1, ptr);
+    printf("Game mode: %d\n", gameMode);
+
+    unsigned char drunkWorld, getGoodWorld, tenthAnniversary, dontStarveWorld;
+    unsigned char notTheBees, remixWorld, noTrapsWorld, zenithWorld;
+
+    fread(&drunkWorld, 1, 1, ptr);
+    printf("Drunk world: %d\n", drunkWorld);
+
+    fread(&getGoodWorld, 1, 1, ptr);
+    printf("Get good world: %d\n", getGoodWorld);
+
+    fread(&tenthAnniversary, 1, 1, ptr);
+    printf("Tenth anniversary world: %d\n", tenthAnniversary);
+
+    fread(&dontStarveWorld, 1, 1, ptr);
+    printf("Dont starve world: %d\n", dontStarveWorld);
+
+    fread(&notTheBees, 1, 1, ptr);
+    printf("Not the bees world: %d\n", notTheBees);
+
+    fread(&remixWorld, 1, 1, ptr);
+    printf("Remix world: %d\n", remixWorld);
+
+    fread(&noTrapsWorld, 1, 1, ptr);
+    printf("No traps world: %d\n", noTrapsWorld);
+
+    fread(&zenithWorld, 1, 1, ptr);
+    printf("Zenith world: %d\n", zenithWorld);
+
+    int64_t creationTime;
+    fread(&creationTime, 8, 1, ptr);
+    printf("Creation time: %lld\n", creationTime);  // need to fix
 
     // go to NPCs section
     printf("NPCs section is located at byte %d\n", positions[4]);
