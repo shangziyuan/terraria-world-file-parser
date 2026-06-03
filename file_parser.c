@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 
 int main(int argc, char *argv[]) {
     char cwd[4096];
@@ -173,7 +174,13 @@ int main(int argc, char *argv[]) {
 
     int64_t creationTime;
     fread(&creationTime, 8, 1, ptr);
-    printf("Creation time: %lld\n", creationTime);  // need to fix
+    int64_t ticks = creationTime & 0x3FFFFFFFFFFFFFFF;  // ticks since 0001-01-01
+    int64_t unixSeconds = (ticks - 621355968000000000LL) / 10000000LL; // 621355968000000000 is the number of 100ns ticks between year 0001 and the Unix epoch (1970). Dividing by 10000000 converts ticks to seconds.
+    time_t t = unixSeconds;
+    struct tm *tm = localtime(&t);
+    char dateStr[64];
+    strftime(dateStr, sizeof(dateStr), "%Y-%m-%d %H:%M:%S", tm);
+    printf("Creation time: %s\n", dateStr);
 
     // go to NPCs section
     printf("NPCs section is located at byte %d\n", positions[4]);
