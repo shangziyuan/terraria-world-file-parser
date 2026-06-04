@@ -89,16 +89,18 @@ int main(int argc, char *argv[]) {
     fread(&worldNameLength, 1, 1, ptr);
     printf("World name length: %u\n", worldNameLength);
 
-    char worldName[worldNameLength];
+    char worldName[worldNameLength + 1];
     fread(worldName, 1, worldNameLength, ptr);
+    worldName[worldNameLength] = '\0';
     printf("World name: %s\n", worldName);
 
     unsigned char worldSeedLength;
     fread(&worldSeedLength, 1, 1, ptr);
     printf("World seed length: %u\n", worldSeedLength);
 
-    char worldSeed[worldSeedLength];
+    char worldSeed[worldSeedLength + 1];
     fread(worldSeed, 1, worldSeedLength, ptr);
+    worldSeed[worldSeedLength] = '\0';
     printf("World seed: %s\n", worldSeed); // 2.1.2.0.304257113
 
     int64_t generatorVersion;
@@ -294,12 +296,6 @@ int main(int argc, char *argv[]) {
     }
 
     free(positions);
-
-    for (int i = 0; i < 20; i++)
-        if (buffer[i] >= 32 && buffer[i] <= 126) // within ASCII range
-            printf("%c", buffer[i]); // prints as ASCII
-        else
-            printf(".");
 
     fclose(ptr);
 

@@ -92,3 +92,4 @@ printf("%.*s\n", len, name);
 - http://ludwig.schafer.free.fr
 - https://angelolloti.com/blog/trust-3/
 - https://terraria.wiki.gg/wiki/NPC_IDs
+- https://github.com/TEdit/Terraria-Map-Editor
